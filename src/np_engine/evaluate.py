@@ -24,6 +24,8 @@ def _build_filter(all_triples):
 
 
 def evaluate(model, P, kg: KG, eval_triples: np.ndarray, batch_ent: int = 2048) -> Dict:
+    if hasattr(model, "prepare_eval"):
+        model.prepare_eval(P)
     tails, heads = _build_filter(kg.all_triples)
     ne = kg.num_ent
     all_ent = np.arange(ne)

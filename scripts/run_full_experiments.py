@@ -38,7 +38,7 @@ REL_EN = {
     "관할법령": "governingLaw", "위임": "delegates", "위임받음": "delegatedBy",
     "상위법령": "parentLaw", "하위법령": "childLaw", "발령기관": "issuedBy",
 }
-MAIN_MODELS = ["TransE", "RotatE", "DistMult", "ComplEx", "TransO", "Ours"]
+MAIN_MODELS = ["TransE", "RotatE", "DistMult", "ComplEx", "TKRL", "TransC", "TransO", "Ours"]
 ABLATIONS = {
     "Ours-L_dir":       {"delta_dir": 0.0},
     "Ours-L_hier_attn": {"beta_hier": 0.0},
@@ -134,6 +134,8 @@ def process_jobs(kg, jobs, out_dir, raw_dir, state_dir, budget):
             break
         from src.np_engine.models import build_model
         model = build_model(cfg.model)
+        if hasattr(model, "set_context"):
+            model.set_context(kg)
         res = evaluate(model, P, kg, kg.test)
         np.savez_compressed(raw_dir / f"{job['id']}.npz",
                             rr=res["_rr"], rel_of=res["_rel_of"],

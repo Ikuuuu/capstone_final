@@ -86,6 +86,8 @@ def train_chunk(
 ) -> Tuple[object, Dict[str, np.ndarray], List[Dict], int]:
     """start_epoch 부터 (시간 예산 내) 학습. 반환 next_epoch == cfg.epochs 면 완료."""
     model = build_model(cfg.model)
+    if hasattr(model, "set_context"):
+        model.set_context(kg)
     if P is None:
         P = model.init_params(kg.num_ent, kg.num_rel, cfg.dim, np.random.RandomState(cfg.seed))
     ne = kg.num_ent
@@ -217,8 +219,13 @@ def train_chunk(
                 for k in G:
                     if k.startswith("_"):
                         continue
-                    rn = np.linalg.norm(G[k], axis=1, keepdims=True)
-                    G[k] *= np.minimum(1.0, cfg.grad_clip / np.maximum(rn, 1e-12))
+                    g = G[k]
+                    if g.ndim == 1:
+                        np.clip(g, -cfg.grad_clip, cfg.grad_clip, out=g)
+                        continue
+                    ax = tuple(range(1, g.ndim))
+                    rn = np.sqrt((g ** 2).sum(axis=ax, keepdims=True))
+                    g *= np.minimum(1.0, cfg.grad_clip / np.maximum(rn, 1e-12))
             for k in P:
                 if k.startswith("_"):
                     continue
