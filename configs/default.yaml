@@ -1,0 +1,86 @@
+# === 기본 설정 (모든 실험의 공통 기반) ===
+project:
+  name: "ontology_kge_thesis"
+  seed: 42
+  device: "cuda"
+  num_workers: 4
+
+paths:
+  data_raw: "data/raw"
+  data_interim: "data/interim"
+  data_processed: "data/processed"
+  data_eval: "data/eval"
+  ontology: "ontology/schema.json"
+  checkpoints: "checkpoints"
+  experiments: "experiments"
+  logs: "logs"
+
+# === 단계 1 : 데이터 수집 ===
+collect:
+  source: "pdf_dir"             # pdf_dir | api | demo
+  pdf_dir: "../법령데이터"        # 사용자가 수동으로 다운로드한 PDF 디렉토리
+  # source=api 모드용 (현재 미사용)
+  api_key: "${oc.env:LAW_API_KEY,DEMO_KEY}"
+  domains: ["법령", "시행령", "시행규칙"]
+  max_documents: 1000
+
+# === 단계 2 : 전처리 ===
+preprocess:
+  triple_extraction:
+    include_articles: true
+    include_addenda: false                 # 부칙 (Phase 2)
+    include_jurisdiction: true
+    include_external_citations: true       # ★ 외부 법령 placeholder (B-1)
+    article_level_internal_citation: true  # ★ 조문 단위 인용
+  validation:
+    cohen_kappa_threshold: 0.7   # 전문가 검수용 (자동 검증 후)
+  split:
+    train: 0.8
+    valid: 0.1
+    test: 0.1
+    stratified_by: "relation"
+
+# === 단계 3 : 모델 (베이스라인 기본값) ===
+model:
+  name: "transe"
+  embedding_dim: 100
+  margin: 1.0
+  norm: 1
+  lm_init: false
+
+training:
+  epochs: 500
+  batch_size: 1024
+  optimizer: "adam"
+  learning_rate: 1.0e-3
+  weight_decay: 1.0e-5
+  negative_sampling:
+    num_negatives: 10
+    method: "uniform"
+  curriculum:
+    enable: false
+    lambda_start: 0.0
+    lambda_end: 1.0
+    schedule_epochs: 100
+  early_stopping:
+    patience: 20
+    metric: "valid_mrr"
+  checkpoint:
+    every_n_epochs: 50
+    save_best: true
+
+evaluation:
+  link_prediction:
+    metrics: ["mrr", "hits@1", "hits@3", "hits@10"]
+    filtered: true
+  triple_classification:
+    threshold_search: true
+  semantic_search:
+    eval_set: "data/eval/semantic_eval.json"
+    top_k: [1, 3, 5, 10]
+  robustness:
+    data_fractions: [0.25, 0.5, 0.75, 1.0]
+    n_runs_per_fraction: 3
+  statistical:
+    bootstrap_samples: 1000
+    alpha: 0.05

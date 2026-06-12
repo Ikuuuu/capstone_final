@@ -1,0 +1,11 @@
+# === 베이스라인 : TRANSO ===
+defaults:
+  - ../default
+
+experiment:
+  name: "baseline_transo"
+
+model:
+  name: "transo"
+  embedding_dim: 100
+  margin: 1.0

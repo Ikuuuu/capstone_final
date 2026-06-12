@@ -1,0 +1,11 @@
+# === 베이스라인 : RGCN ===
+defaults:
+  - ../default
+
+experiment:
+  name: "baseline_rgcn"
+
+model:
+  name: "rgcn"
+  embedding_dim: 100
+  margin: 1.0

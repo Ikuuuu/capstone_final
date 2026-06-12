@@ -1,0 +1,40 @@
+{
+  "_comment": "국방 법령 도메인 OWL Lite 스키마 (Phase 1 초안). 트리플 자동 추출 후 본 스키마에 맞춰 검증한다.",
+  "entity_types": {},
+  "type_hierarchy": {
+    "Law": "LegalDocument",
+    "EnforcementOrdinance": "LegalDocument",
+    "EnforcementRule": "LegalDocument",
+    "SpecialRegulation": "LegalDocument",
+    "Article": "TextUnit",
+    "AddendumArticle": "TextUnit",
+    "Organization": "Entity"
+  },
+  "relation_domain": {
+    "type": "LegalDocument",
+    "상위법령": "LegalDocument",
+    "하위법령": "LegalDocument",
+    "위임":     "LegalDocument",
+    "인용":     "LegalDocument",
+    "소속":     "Article",
+    "포함":     "LegalDocument",
+    "소관기관": "LegalDocument"
+  },
+  "relation_range": {
+    "type":     "LegalDocument",
+    "상위법령": "LegalDocument",
+    "하위법령": "LegalDocument",
+    "위임":     "LegalDocument",
+    "인용":     "LegalDocument",
+    "소속":     "LegalDocument",
+    "포함":     "Article",
+    "소관기관": "Organization"
+  },
+  "symmetric_relations": [],
+  "transitive_relations": ["상위법령", "하위법령"],
+  "functional_relations": ["소속"],
+  "inverse_pairs": {
+    "상위법령": "하위법령",
+    "포함": "소속"
+  }
+}

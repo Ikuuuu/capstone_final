@@ -1,0 +1,11 @@
+# === 베이스라인 : TRANSE ===
+defaults:
+  - ../default
+
+experiment:
+  name: "baseline_transe"
+
+model:
+  name: "transe"
+  embedding_dim: 100
+  margin: 1.0

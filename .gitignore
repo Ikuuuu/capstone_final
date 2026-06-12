@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.env
+
+# Data (대용량은 별도 관리)
+data/raw/*
+data/interim/*
+data/processed/*
+data/eval/*
+!data/**/.gitkeep
+ontology/*.owl
+
+# Experiment artifacts
+experiments/*
+!experiments/.gitkeep
+checkpoints/*
+!checkpoints/.gitkeep
+logs/*.log
+logs/*
+!logs/.gitkeep
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/

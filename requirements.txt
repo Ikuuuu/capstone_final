@@ -1,0 +1,30 @@
+# Core deep learning
+torch>=2.0.0
+numpy>=1.24.0
+scipy>=1.10.0
+
+# Configuration & data
+pyyaml>=6.0
+omegaconf>=2.3.0
+pandas>=2.0.0
+
+# PDF parsing (단계 1 : 법령 PDF 파싱)
+pypdf>=4.0.0
+
+# Knowledge Graph & Ontology
+rdflib>=7.0.0
+networkx>=3.0
+
+# Korean pretrained LM (Phase 3 보강 장치)
+transformers>=4.35.0
+tokenizers>=0.14.0
+
+# Evaluation & statistics
+scikit-learn>=1.3.0
+
+# Logging
+tqdm>=4.65.0
+tensorboard>=2.14.0
+
+# Optional : KGE library (Phase 2 베이스라인 재현 시)
+# pykeen>=1.10.0

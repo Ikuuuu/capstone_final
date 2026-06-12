@@ -1,0 +1,11 @@
+# === 베이스라인 : TRANSC ===
+defaults:
+  - ../default
+
+experiment:
+  name: "baseline_transc"
+
+model:
+  name: "transc"
+  embedding_dim: 100
+  margin: 1.0

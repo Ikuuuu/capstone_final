@@ -1,0 +1,36 @@
+# === 본 연구 모델 (Ontology-Integrated KGE) 설정 ===
+defaults:
+  - default
+
+experiment:
+  name: "ours_l_dir_hier_attn"
+  description: "TransE + L_dir + L_hier_attn + L_type + L_attr + Korean LM init"
+
+model:
+  name: "ours"
+  embedding_dim: 100
+  margin: 1.0
+  norm: 1
+  lm_init: true
+  lm_name: "klue/roberta-base"
+  lm_projection_dim: 100
+
+losses:
+  weights:
+    alpha_type: 0.5        # L_type 가중치
+    beta_hier: 0.5         # L_hier_attn 가중치
+    gamma_attr: 0.5        # L_attr 가중치
+    delta_dir: 1.0         # L_dir 가중치 (기여 ①)
+  l_dir:
+    margin_dir: 1.0
+    skip_symmetric: true   # 대칭 관계는 L_dir 적용 제외
+  l_hier_attn:
+    attention_hidden_dim: 64
+    initial_uniform_epochs: 50   # 초기 50 epoch 은 균등 가중치로 안정화
+
+training:
+  curriculum:
+    enable: true
+    lambda_start: 0.0
+    lambda_end: 1.0
+    schedule_epochs: 100

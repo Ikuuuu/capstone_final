@@ -1,0 +1,11 @@
+# === 베이스라인 : ROTATE ===
+defaults:
+  - ../default
+
+experiment:
+  name: "baseline_rotate"
+
+model:
+  name: "rotate"
+  embedding_dim: 100
+  margin: 1.0
