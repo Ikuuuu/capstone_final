@@ -2,8 +2,9 @@
 PYTHON ?= python
 CFG    ?= configs/default.yaml
 OURS   ?= configs/ours.yaml
+RUN    ?= experiments/final_run2
 
-.PHONY: help data collect preprocess train baselines ablation evaluate inference all clean
+.PHONY: help data collect preprocess train baselines ablation evaluate inference figures-core4 all clean
 
 help:
 	@echo "사용 가능 타겟:"
@@ -15,6 +16,7 @@ help:
 	@echo "  make evaluate   - 단계 4: 평가"
 	@echo "  make ablation   - Ablation Study 실행"
 	@echo "  make inference  - 단계 5: 추론 데모"
+	@echo "  make figures-core4 - 핵심 4개 모델 비교 그림 생성(RUN=실험폴더)"
 	@echo "  make all        - 전체 파이프라인 실행"
 	@echo "  make clean      - 임시 파일 정리"
 
@@ -43,6 +45,9 @@ ablation:
 
 inference:
 	$(PYTHON) scripts/05_inference.py --checkpoint checkpoints/ours/best.pt
+
+figures-core4:
+	$(PYTHON) scripts/plot_core4.py --run-dir $(RUN)
 
 all: data train baselines evaluate ablation
 
